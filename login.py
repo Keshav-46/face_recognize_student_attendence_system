@@ -1,6 +1,7 @@
 from tkinter import*
 from tkinter import ttk
 from PIL import Image,ImageTk
+from tkinter import messagebox
 
 
 class login_window:
@@ -57,18 +58,25 @@ class login_window:
        lblimg3.place(x=650,y=397,width=25,height=25)
        
        #loginBuutton
-       loginbtn=Button(frame,text="Login",font=("times new roman",15,"bold"),bd=3,relief=RIDGE,bg="red",fg="orange")
+       loginbtn=Button(frame,command=self.login,text="Login",font=("times new roman",15,"bold"),bd=3,relief=RIDGE,bg="red",fg="orange")
        loginbtn.place(x=110,y=300,width=120,height=35)
 
        #registrationButton
-       registerbtn=Button(frame,text="New User Register",font=("times new roman",15,"bold"),bd=3,relief=RIDGE,bg="red",fg="orange")
-       registerbtn.place(x=110,y=300,width=120,height=35)
+       registerbtn=Button(frame,text="New User Register",font=("times new roman",10,"bold"),borderwidth=0,bg="black",fg="orange",activebackground="black")
+       registerbtn.place(x=15,y=350,width=160)
 
        #forgetpasswordButton
-       forgetbtn=Button(frame,text="Forget Password",font=("times new roman",15,"bold"),bd=3,relief=RIDGE,bg="red",fg="orange")
-       forgetbtn.place(x=110,y=300,width=120,height=35)
+       forgetbtn=Button(frame,text="Forget Password",font=("times new roman",10,"bold"),borderwidth=0,bg="black",fg="orange",activebackground="black")
+       forgetbtn.place(x=10,y=370,width=160)
     
-       
+   def login(self):
+      if self.txtuser.get()=="" or self.txtpass.get()== "":
+         messagebox.showerror("Error","all field required")
+      elif self.txtuser.get()=="keshav45" and self.txtpass.get()=="keshav@123":
+         messagebox.showinfo("success","welcome to gundrukTech")
+      else:
+         messagebox.showerror("Invalid","Invalid username and password")
+
 
 
       
