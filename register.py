@@ -82,8 +82,7 @@ class Register:
 
         self.combo_security_Q = ttk.Combobox(frame, textvariable=self.var_securityQ, font=(
             "times new roman", 15, "bold"), state="readonly")
-        self.combo_security_Q["values"] = (
-            "Select", "Your Birth place", "your dad name", "your mother name")
+        self.combo_security_Q["values"] = ("Select", "Your Birth place", "your dad name", "your mother name")
         self.combo_security_Q.place(x=50, y=270, width=250)
         self.combo_security_Q.current(0)
 
@@ -136,12 +135,11 @@ class Register:
                     borderwidth=0, cursor="hand2")
         b1.place(x=330, y=420, width=200)
 
-
-# ................fuction
+# ...............function...................
 
     def register_data(self):
         if self.var_fname.get() == "" or self.var_email.get() == "" or self.var_securityQ.get() == "Select":
-            messagebox.showerror("Error", "All fills are required")
+            messagebox.showerror("Error", "All fills are required",parent=self.root)
         elif self.var_pass.get() != self.var_confpass.get():
             messagebox.showerror(
                 "Error", "password and confirm password must be same")
