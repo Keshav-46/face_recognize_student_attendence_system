@@ -12,7 +12,9 @@ import numpy as np
 from time import strftime
 from datetime import datetime
 import cv2 as cv
-
+# import pyttsx3
+from os.path import isfile,join
+from os import listdir
 
 
 
@@ -47,6 +49,22 @@ class Face_Recognition:
         b1_1=Button(f_lbl,text="Face Recognition",cursor="hand2",command=self.face_recog,font=("times new roman",15,"bold"),bg="darkgreen",fg="white")
         b1_1.place(x=300,y=605,width=190,height=35)
 
+        # =================Attendance ====================
+    def mark_attendance(self,i,r,n,d):
+        with open("Teamkyzen.csv","r+",newline="\n") as f:
+            myDatalist=f.readlines()
+            name_list=[]
+            for line in myDatalist:
+                entry=line.split((","))
+                name_list.append(entry[0])
+            if((i not in name_list) and (r not in name_list) and (n not in name_list) and (i not in name_list)):
+                now=datetime.now()
+                d1=now.strftime("%d/%m/%Y")
+                # d1 for date variable
+                dtString=now.strftime("%H:%M:%S")
+                f.writelines(f"\n{i},{r},{n},{d},{dtString},{d1},Present")
+
+
      # face recognition  command=self.face_recog
     def face_recog(self):
         def draw_boundray(img,classifier,scaleFactor,minNeighbors,color,text,clf):
@@ -55,9 +73,9 @@ class Face_Recognition:
 
             coord=[]
             for (x,y,w,h) in features:
-                cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),3)
-                id,predict=clf.predict(gray_image[y:y+h,x:x+w])
-                confidence=int((100*(1-predict/300)))
+                cv2.rectangle(img,(x,y),(x+w+20,y+h+20),(0,255,0),3)
+                id,predict=clf.predict(gray_image[y:y+h+20,x:x+w+20])
+                # confidence=int((100*(1-predict/300)))
 
                 conn=mysql.connector.connect(host="localhost",username="root",password="Keshav@123",database="mydata")
                 my_cursor=conn.cursor()
@@ -83,15 +101,31 @@ class Face_Recognition:
                 i=my_cursor.fetchone()
                 i=str(i)
                 # i= "+".join(i)
+                
+                # new code for accuracy calculation
+                # img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+                # result = id.predict(img)
 
-                if confidence>77:
+                if predict < 500:
+                # if result[1] < 500:
+                    confidence=int((100*(1-predict/300)))
+                    # str2 = str(confidence)
+                    # confidence = int(100 * (1 - (result[1])/300))
+                    # display_string = str(confidence)+'% confidence it is user'
+                # cv2.putText(img,display_string(250, 250), cv2.FONT_HERSHEY_COMPLEX,1,(0,255,0),3)
+                    cv2.putText(img,f"Accuracy:{confidence}%",(x, y-100), cv2.FONT_HERSHEY_COMPLEX,0.8,(0,255,0),3)
+
+
+
+                if confidence> 80:
                     cv2.putText(img,f"id:{i}",(x,y-75),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
                     cv2.putText(img,f"Roll:{r}",(x,y-55),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
                     cv2.putText(img,f"Name:{n}",(x,y-30),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
                     cv2.putText(img,f"Department:{d}",(x,y-5),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
+                    self.mark_attendance(i,r,n,d)
 
                 else:
-                    cv2.rectangle(img,(x,y),(x+w,y+h),(0,0,255),3)
+                    cv2.rectangle(img,(x,y),(x+w+20,y+h+20),(0,0,255),3)
                     cv2.putText(img,"Unknown Face",(x,y-5),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
 
                 coord=[x,y,w,h]

@@ -103,7 +103,7 @@ class Register:
             frame, textvariable=self.var_pass, font=("times new roman", 15))
         self.txt_pswd.place(x=50, y=340, width=250)
 
-        confirm_pswd = Label(frame, text="Comform Password", font=(
+        confirm_pswd = Label(frame, text="Comfirm Password", font=(
             "times new roman", 15, "bold"), bg="white")
         confirm_pswd.place(x=370, y=310)
 
@@ -154,7 +154,7 @@ class Register:
             my_cursor.execute(query, value)
             row = my_cursor.fetchone()
             if row!= None:
-                messagebox.showerror("Error", "user already exit ,try another email")
+                messagebox.showerror("Error", "user already exist ,try another email")
             else:
                 my_cursor.execute("insert into register values(%s,%s,%s,%s,%s,%s,%s)", (
 
@@ -166,7 +166,7 @@ class Register:
                     self.var_securityA.get(),
                     self.var_pass.get()
                 ))
-                messagebox.showinfo("Success","Register Successfully")
+                messagebox.showinfo("Success","Registered Successfully")
             conn.commit()
             conn.close()
                
